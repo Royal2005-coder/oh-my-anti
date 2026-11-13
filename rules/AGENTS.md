@@ -65,3 +65,14 @@
 - Khi thực thi **egm-speckit / speckit-egm (Full-Cycle Orchestrator)**: Chạy liên tục từ Stage 1 (Spec Kit: Specification & Clarify) $\rightarrow$ Stage 2 (EGM Swarm Review: `invoke_subagent` cho `egm-design`, `egm-zoom-out`, `egm-codebase-details`, `egm-synthesizer`) $\rightarrow$ Stage 3 (Plan & Tasks: `speckit-plan`, `egm-implementation-readiness`, `speckit-tasks`, `speckit-analyze`) $\rightarrow$ Stage 4 (Implement & Converge: `speckit-implement`, testing, `speckit-converge`).
 - Khi thực thi **EGM Goldfish Review**: Subagent review BẮT BUỘC chạy trong ngữ cảnh độc lập mới (`invoke_subagent` với prompt persona từ `agents/<persona>.md`), không bị bias bởi hội thoại cha, đối chiếu trực tiếp với tài liệu thiết kế và tiêu chuẩn tài liệu `resources/document_standards/`.
 - Khi thực thi **Spec Kit (SDD)**: Luôn đi theo quy trình chặt chẽ: `Constitution` -> `Specify` -> `Clarify` -> `Plan` -> `Tasks` -> `Implement` -> `Converge`. Nếu dự án chưa có `.specify/`, chạy `specify init --here --force --integration agy --non-interactive --script ps` hoặc dùng bộ template/script được đóng gói sẵn.
+
+## 3. Tiêu chuẩn điều phối Task & Cây tiến độ (Harness² Task Recall)
+- Khi thực thi các task từ `tasks.md` hoặc quy trình `/egm-speckit` / `/harness2`:
+  * **Bắt buộc Recall Cây Task**: Mỗi khi hoàn thành một task, agent BẮT BUỘC in lại **Cây Tiến Độ Thu Gọn (Task Execution Tree)** cập nhật trực quan trong phản hồi.
+  * **Trực quan hóa trạng thái**:
+    - `[✓] <ID>`: Các task đã hoàn thành xong.
+    - `[▶] <ID_next> ◀ CURRENT ACTIVE TASK`: Task đang kích hoạt làm ngay tiếp theo.
+    - `[ ] <ID>`: Các task đang xếp hàng đợi.
+  * **Vòng lặp Harness² tự trị (Propose -> Probe -> Compose)**:
+    - Khi chuyển sang task `[▶]`, agent phải nói rõ kế hoạch Propose (giải pháp đề xuất), Probe (thăm dò/kiểm thử), và Compose (tổng hợp code) trước khi thực hiện.
+  * **Tự động cập nhật file**: Luôn cập nhật trạng thái `- [x]` trong file `tasks.md` hoặc gọi `task_ledger.py --update <ID> DONE` để Statusline cập nhật tức thì.
