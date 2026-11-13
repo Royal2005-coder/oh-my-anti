@@ -1,0 +1,24 @@
+{
+  "name": "oh-my-anti",
+  "displayName": "Oh My Anti (Unified SDD & Adversarial Review Suite)",
+  "version": "1.0.0",
+  "description": "End-to-end spec engineering toolkit for Antigravity combining GitHub Spec Kit (Spec-Driven Development) and Google Elephant-Goldfish Model (EGM Swarm Review) with autonomous orchestration.",
+  "author": {
+    "name": "Royal2005-coder",
+    "url": "https://github.com/Royal2005-coder"
+  },
+  "homepage": "https://github.com/Royal2005-coder/oh-my-anti",
+  "repository": "https://github.com/Royal2005-coder/oh-my-anti",
+  "license": "MIT",
+  "keywords": [
+    "antigravity",
+    "spec-kit",
+    "sdd",
+    "egm",
+    "elephant-goldfish",
+    "adversarial-review",
+    "subagents",
+    "code-generation",
+    "orchestrator"
+  ]
+}
