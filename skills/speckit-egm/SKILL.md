@@ -1,102 +1,125 @@
----
-name: "speckit-egm"
-description: "Unified Spec-Driven Development (Spec Kit) and Adversarial Multi-Agent Review (EGM) Pipeline. End-to-end autonomous pipeline from specification, multi-agent adversarial audit, technical planning, task breakdown, to implementation and convergence."
-compatibility: "Requires specify-cli, Antigravity invoke_subagent, and EGM reviewer subagents"
+﻿---
+name: "egm-speckit"
+description: "Master End-to-End Orchestrator uniting GitHub Spec Kit (Spec-Driven Development) and Google Elephant-Goldfish Model (Adversarial Multi-Agent Review). Autonomous 5-phase engineering pipeline from inception, adversarial swarm audit, planning, task decomposition, TDD execution, to drift audit and convergence."
+compatibility: "Antigravity invoke_subagent, specify-cli, EGM personas"
 metadata:
-  author: "github-spec-kit & google-egm"
-  version: "1.2.0"
+  author: "Royal2005-coder"
+  version: "2.0.0"
 ---
 
-# Unified Spec Kit + EGM Engineering Pipeline (End-to-End Orchestrator)
+# `egm-speckit` Master Orchestrator: Full-Cycle Spec & Adversarial Engineering
 
-Execute a complete end-to-end engineering cycle combining **GitHub Spec Kit** (for rigorous specification, planning, and task tracking) and **Google Elephant-Goldfish Model (EGM)** (for independent adversarial multi-agent review via isolated subagents).
+This skill is the **complete, end-to-end autonomous engineering pipeline** uniting the dual superpowers of:
+1. **GitHub Spec Kit (SDD)**: Rigorous specification, clarification, technical planning, atomic task decomposition, and verifiable convergence.
+2. **Google Elephant-Goldfish Model (EGM)**: Deep repository context (Elephant) combined with unbiased adversarial review by fresh-context, isolated subagents (Goldfish Swarm).
 
-When invoked, the agent autonomously drives the feature or architectural change through all 4 stages to final convergence without skipping quality gates.
+When triggered via `/egm-speckit <feature / refactor / requirement>`, the agent executes all 5 phases sequentially to final sign-off without taking shortcuts.
+
+---
+
+## ðŸ” Complete Lifecycle Architecture
 
 ```mermaid
 flowchart TD
-    subgraph S1["Stage 1: Specification (Spec Kit)"]
-        A1["Check / Init .specify/<br/>(specify init --here --force)"] --> A2["/speckit-specify<br/>(Create spec.md)"]
-        A2 --> A3["/speckit-clarify<br/>(Resolve edge cases)"]
+    subgraph P0["Phase 0: Workspace & Constitution Setup"]
+        A0["Verify / Bootstrap .specify/<br/>(specify init --here --force)"] --> A1["Load Constitution & Invariants<br/>(.specify/memory/constitution.md + AGENTS.md)"]
     end
 
-    subgraph S2["Stage 2: EGM Adversarial Audit (Fresh Context Subagents)"]
-        B1["Dispatch Reviewers in Parallel<br/>(invoke_subagent)"]
-        B1 --> B2["egm-design (Critic)"]
-        B1 --> B3["egm-zoom-out (Architect)"]
-        B1 --> B4["egm-codebase-details (Auditor)"]
-        B2 & B3 & B4 --> B5["egm-synthesizer<br/>(Consolidate Review Matrix)"]
+    subgraph P1["Phase 1: Exploration & Specification (Elephant Context)"]
+        B1["Elephant Exploration & Solution Space<br/>(/egm-brainstorm)"] --> B2["Formal Feature Specification<br/>(/speckit-specify -> specs/NNN/spec.md)"]
+        B2 --> B3["Ambiguity & Edge-Case Probing<br/>(/speckit-clarify)"]
     end
 
-    subgraph S3["Stage 3: Technical Planning & Task Breakdown"]
-        C1["/speckit-plan<br/>(Incorporate EGM feedback into plan.md)"] --> C2["Validate Readiness<br/>(egm-implementation-readiness)"]
-        C2 --> C3["/speckit-tasks<br/>(Generate atomic tasks.md)"]
-        C3 --> C4["/speckit-analyze & /speckit-checklist<br/>(Cross-artifact consistency check)"]
+    subgraph P2["Phase 2: Goldfish Swarm Adversarial Audit (Fresh Context Subagents)"]
+        C0["Spawn Isolated Reviewers in Parallel<br/>(invoke_subagent)"]
+        C0 --> C1["egm-zoom-out (Minimalism & Existing Code Reuse)"]
+        C0 --> C2["egm-comprehension (Clarity, Zero Hidden Assumptions)"]
+        C0 --> C3["egm-design (Hostile Critic: Failure Modes & Security)"]
+        C0 --> C4["egm-codebase-details (Live Schema, DTO & Type Match)"]
+        C1 & C2 & C3 & C4 --> C5["egm-synthesizer<br/>(Consolidated Review Matrix: P0/P1/P2)"]
+        C5 --> C6["Architectural Trade-Off Resolution<br/>(/egm-resolve)"]
     end
 
-    subgraph S4["Stage 4: Implementation & Convergence"]
-        D1["/speckit-implement<br/>(Execute tasks with TDD)"] --> D2["Verification<br/>(Typecheck, lint, unit tests)"]
-        D2 --> D3["/speckit-converge<br/>(Reconcile code vs spec & close)"]
+    subgraph P3["Phase 3: Technical Planning & Task Decomposition"]
+        D1["Generate Technical Plan<br/>(/speckit-plan -> specs/NNN/plan.md)"] --> D2["Gate Check: Implementation Readiness<br/>(egm-implementation-readiness)"]
+        D2 --> D3["Generate Atomic Dependency Tasks<br/>(/speckit-tasks -> specs/NNN/tasks.md)"]
+        D3 --> D4["Cross-Artifact Consistency Audit<br/>(/speckit-analyze & /speckit-checklist)"]
     end
 
-    S1 --> S2 --> S3 --> S4
+    subgraph P4["Phase 4: Phased TDD Implementation"]
+        E1["Phased Task Execution<br/>(/speckit-implement)"] --> E2["Automated Verification Suite<br/>(Typecheck, lint, unit & integration tests)"]
+    end
+
+    subgraph P5["Phase 5: Convergence & Drift Audit"]
+        F1["Codebase Reconcile & Task Closing<br/>(/speckit-converge)"] --> F2["Spec Drift Verification<br/>(/egm-drift-report)"]
+        F2 --> F3["Final Deliverable Sign-Off"]
+    end
+
+    P0 --> P1 --> P2 --> P3 --> P4 --> P5
 ```
 
 ---
 
-## Autonomous Execution Protocol
+## ðŸ“‹ Step-by-Step Execution Protocol
 
-### Step 0: Environment & Workspace Check
-1. Check if `.specify/` exists in the project root.
-   - If not, automatically run:
+### Phase 0: Workspace & Constitution Setup
+1. **Check Infrastructure**:
+   - Check if `.specify/` exists in project root. If missing, automatically initialize:
      ```powershell
      specify init --here --force --integration agy --non-interactive --script ps
      ```
-2. Read project principles from `.specify/memory/constitution.md` and repository conventions from `AGENTS.md`.
+2. **Review Constitution**:
+   - Read `.specify/memory/constitution.md` and repository rules in `AGENTS.md`.
+   - Extract non-negotiable architectural constraints (e.g. state management patterns, strict typing, forbidden libraries, security policies).
 
----
+### Phase 1: Exploration & Specification Drafting
+1. **Elephant Brainstorming (`/egm-brainstorm`)**:
+   - Survey the problem space with deep codebase context. Formulate 2-3 design alternatives and choose the cleanest one based on project invariants.
+2. **Draft Baseline Specification (`/speckit-specify`)**:
+   - Create `specs/NNN-<feature-name>/spec.md` following standard templates.
+   - Detail User Stories, Functional Requirements, Non-Functional Requirements, Input/Output boundaries, and Acceptance Criteria.
+3. **Clarify Ambiguities (`/speckit-clarify`)**:
+   - Probe for unstated assumptions, missing edge cases (network failure, race conditions, empty data, authorization limits) and update `spec.md`.
 
-### Step 1: Specification (Spec Kit)
-1. Invoke `/speckit-specify` using the user's natural language requirements.
-2. Formulate the short name, target feature directory (e.g. `specs/NNN-<feature>/`), and write initial `spec.md`.
-3. If ambiguities, assumptions, or missing requirements exist, run `/speckit-clarify` to resolve them before proceeding.
-4. Record resolved requirements into `spec.md`.
+### Phase 2: Goldfish Swarm Adversarial Audit
+> [!IMPORTANT]
+> Goldfish subagents **MUST** run in fresh, isolated contexts using `invoke_subagent`. They examine the drafted `spec.md` without conversation history bias.
 
----
+1. **Dispatch Parallel Reviewers**:
+   - **`egm-zoom-out`**: Challenges over-engineering, enforces YAGNI, identifies existing helpers/services in the codebase that should be reused.
+   - **`egm-comprehension`**: Naive reader review. Flags unclear terms, missing definitions, and comprehension barriers.
+   - **`egm-design`**: Adversarial review. Hunts for single-points-of-failure, scalability bottlenecks, race conditions, and security attack vectors.
+   - **`egm-codebase-details`**: Verifies referenced files, model names, schema columns, and API contracts against actual code.
+2. **Synthesize & Resolve (`egm-synthesizer` & `/egm-resolve`)**:
+   - Deduplicate findings into a **Review Matrix**:
+     * **P0 Blockers**: Must be fixed in `spec.md` immediately before planning.
+     * **P1 Majors**: Must be specifically addressed in `plan.md`.
+     * **P2 Minors**: Polish and maintainability items.
+   - Apply resolutions to `spec.md`.
 
-### Step 2: Adversarial Multi-Agent Audit (EGM Swarm)
-Before drafting the implementation plan or touching code, launch the isolated EGM reviewer subagents using `invoke_subagent` (ensuring each runs in a fresh, un-biased context):
+### Phase 3: Technical Planning & Task Breakdown
+1. **Draft Technical Plan (`/speckit-plan`)**:
+   - Generate `specs/NNN-<feature-name>/plan.md` integrating all resolved EGM findings.
+   - Detail data structures, interfaces/DTOs, component boundaries, state flow, and error-handling strategies.
+2. **Implementation Readiness Gate (`egm-implementation-readiness`)**:
+   - Review `plan.md` to guarantee it leaves **zero architectural decisions** to the implementer. All contracts must be concrete.
+3. **Atomic Task Breakdown (`/speckit-tasks`)**:
+   - Generate `specs/NNN-<feature-name>/tasks.md` with ordered, independent, atomic checklist tasks tagged by phase (e.g., Phase 1: Models & Stores, Phase 2: Services & Logic, Phase 3: UI & Wiring, Phase 4: Verification).
+4. **Consistency Audit (`/speckit-analyze` & `/speckit-checklist`)**:
+   - Cross-check traceability: Every requirement in `spec.md` maps to tasks in `tasks.md`. Generate acceptance criteria checklists.
 
-1. **`egm-design`**:
-   - Prompt: Review the specification at `specs/NNN-<feature>/spec.md` against existing architecture, failure modes, scalability limits, and security vulnerabilities.
-2. **`egm-zoom-out`**:
-   - Prompt: Scrutinize the design for over-engineering (YAGNI), excessive abstractions, and identify opportunities for reusing existing codebase modules and libraries.
-3. **`egm-codebase-details`**:
-   - Prompt: Verify exact file paths, schemas, interfaces, DTOs, and database contracts against live codebase implementation.
-4. **`egm-synthesizer`**:
-   - Compile findings into a consolidated **Review Matrix**:
-     * **Blockers (P0)**: Architectural defects that must be resolved prior to planning.
-     * **Majors (P1)**: Edge cases and failure recovery paths to integrate into `plan.md`.
-     * **Minors (P2)**: Code quality and naming polish items.
+### Phase 4: Phased TDD Implementation
+1. **Execute Tasks (`/speckit-implement`)**:
+   - Implement tasks sequentially following TDD: write test $\rightarrow$ implement code $\rightarrow$ verify green.
+   - Adhere strictly to project conventions: strict TypeScript, Signals/Observables, clean architecture, no `any`, proper JSDoc.
+2. **Automated Verification**:
+   - Run typecheck, linter, unit tests, and integration tests after each phase.
 
----
+### Phase 5: Convergence & Drift Audit
+1. **Reconcile & Close (`/speckit-converge`)**:
+   - Scan codebase to confirm 100% of tasks in `tasks.md` are completed. Reconcile any unexpected edge cases.
+2. **Spec Drift Report (`/egm-drift-report`)**:
+   - Audit actual implementation against `spec.md` and `plan.md`. Ensure zero unintended deviation or scope creep occurred.
+3. **Final Sign-off**:
+   - Deliver summary with file links, test results, and verified acceptance criteria to the user.
 
-### Step 3: Technical Planning & Task Breakdown
-1. Incorporate all P0/P1 items from the EGM synthesis into `/speckit-plan`.
-2. Generate `specs/NNN-<feature>/plan.md` covering architecture, contracts, dependencies, and test strategies.
-3. Validate plan readiness using `egm-implementation-readiness` (confirm zero ambiguity remains for the implementer).
-4. Run `/speckit-tasks` to generate atomic, dependency-ordered tasks in `specs/NNN-<feature>/tasks.md`.
-5. Run `/speckit-analyze` and `/speckit-checklist` to guarantee 100% traceability between requirements in `spec.md` and tasks in `tasks.md`.
-
----
-
-### Step 4: Implementation & Convergence
-1. Run `/speckit-implement`:
-   - Execute tasks in phase order.
-   - Adhere strictly to project coding standards (strict types, JSDoc, MVVM/Signals, no `any`, zero regression).
-2. Run automated validation:
-   - Run type checking, linting, and automated unit tests.
-3. Run `/speckit-converge`:
-   - Reconcile codebase state against `spec.md` and `plan.md`.
-   - Ensure all acceptance criteria are met and no orphaned tasks remain.
-   - Summarize the completed delivery for the user.
