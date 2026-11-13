@@ -6,7 +6,7 @@
 - Luôn thấu hiểu mọi yêu cầu bằng tiếng Việt (bao gồm khẩu ngữ, từ lóng kỹ thuật, cách diễn đạt đời thường).
 - Không yêu cầu người dùng phải gõ đúng tên skill hay cú pháp tiếng Anh.
 - Tự động map ý định người dùng tới các bộ skills tương ứng:
-  * "quy trình trọn gói / end to end / làm từ a tới z / kết hợp spec kit và egm / speckit-egm / orchestration spec và phản biện" -> speckit-egm
+  * "quy trình trọn gói / end to end / làm từ a tới z / kết hợp spec kit và egm / speckit-egm / egm-speckit / fullcycle / hoàn thiện chuẩn / orchestration spec và phản biện" -> egm-speckit
   * "viết code sạch / gọn lại / dễ đọc" -> clean-code
   * "thiết kế bảng / database / csdl" -> database-design
   * "giao diện đẹp / làm lại ui / bảng màu" -> ui-ux-pro-max
@@ -62,6 +62,6 @@
 ## 2. Tiêu chuẩn phản hồi & Hoạt động Subagent
 - Giữ phong cách ngắn gọn, súc tích, giải quyết thẳng vào vấn đề.
 - Ưu tiên hiển thị giải pháp hoặc code mẫu trực tiếp, không vòng vo giải thích thừa.
-- Khi thực thi **speckit-egm (End-to-End Orchestrator)**: Chạy liên tục từ Stage 1 (Spec Kit: Specification & Clarify) $\rightarrow$ Stage 2 (EGM Swarm Review: `invoke_subagent` cho `egm-design`, `egm-zoom-out`, `egm-codebase-details`, `egm-synthesizer`) $\rightarrow$ Stage 3 (Plan & Tasks: `speckit-plan`, `egm-implementation-readiness`, `speckit-tasks`, `speckit-analyze`) $\rightarrow$ Stage 4 (Implement & Converge: `speckit-implement`, testing, `speckit-converge`).
+- Khi thực thi **egm-speckit / speckit-egm (Full-Cycle Orchestrator)**: Chạy liên tục từ Stage 1 (Spec Kit: Specification & Clarify) $\rightarrow$ Stage 2 (EGM Swarm Review: `invoke_subagent` cho `egm-design`, `egm-zoom-out`, `egm-codebase-details`, `egm-synthesizer`) $\rightarrow$ Stage 3 (Plan & Tasks: `speckit-plan`, `egm-implementation-readiness`, `speckit-tasks`, `speckit-analyze`) $\rightarrow$ Stage 4 (Implement & Converge: `speckit-implement`, testing, `speckit-converge`).
 - Khi thực thi **EGM Goldfish Review**: Subagent review BẮT BUỘC chạy trong ngữ cảnh độc lập mới (`invoke_subagent` với prompt persona từ `agents/<persona>.md`), không bị bias bởi hội thoại cha, đối chiếu trực tiếp với tài liệu thiết kế và tiêu chuẩn tài liệu `resources/document_standards/`.
 - Khi thực thi **Spec Kit (SDD)**: Luôn đi theo quy trình chặt chẽ: `Constitution` -> `Specify` -> `Clarify` -> `Plan` -> `Tasks` -> `Implement` -> `Converge`. Nếu dự án chưa có `.specify/`, chạy `specify init --here --force --integration agy --non-interactive --script ps` hoặc dùng bộ template/script được đóng gói sẵn.
