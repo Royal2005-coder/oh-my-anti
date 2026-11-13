@@ -76,13 +76,13 @@ def get_task_ledger_info(cwd):
                 for t in data.get("tasks", []):
                     if t.get("status") == "IN_PROGRESS":
                         t_id = t.get("id", "TASK")
-                        t_title = t.get("title", "")[:18]
-                        active_task = f"[{t_id}:▶ {t_title}]"
+                        clean_t = re.sub(r"[`*]", "", t.get("title", "")).strip()
+                        active_task = f"[{t_id}:▶ {clean_t[:16]}]"
                         break
                     if not active_task and t.get("status") == "TODO":
                         t_id = t.get("id", "TASK")
-                        t_title = t.get("title", "")[:18]
-                        active_task = f"[{t_id}:▶ {t_title}]"
+                        clean_t = re.sub(r"[`*]", "", t.get("title", "")).strip()
+                        active_task = f"[{t_id}:▶ {clean_t[:16]}]"
                 if total > 0:
                     badge = f" {active_task}" if active_task else ""
                     return f"📋 {done}/{total}{badge}"
@@ -99,16 +99,21 @@ def get_task_ledger_info(cwd):
             
             active_badge = ""
             for l in lines:
-                m = re.match(r"^\s*-\s*\[([ >])\]\s*(\[?(T\d+)\]?:?)?\s*(.*)", l)
+                m = re.match(r"^\s*-\s*\[([ >])\]\s*(?:\*\*)?\[?((?:TASK|T)[-_0-9a-zA-Z.]+)\]?(?:\*\*)?:?\s*(.*)", l, re.IGNORECASE)
                 if m:
-                    marker, _, tid, desc = m.groups()
-                    tid_str = tid if tid else "TASK"
-                    clean_desc = desc.strip()
-                    if ":" in clean_desc and len(clean_desc.split(":", 1)[0]) < 20:
-                        clean_desc = clean_desc.split(":", 1)[1].strip()
-                    short_desc = (clean_desc[:16] + "..") if len(clean_desc) > 18 else clean_desc
-                    active_badge = f" [{tid_str}:▶ {short_desc}]"
+                    marker, tid, desc = m.groups()
+                    clean_desc = re.sub(r"[`*]", "", desc).strip()
+                    short_desc = (clean_desc[:14] + "..") if len(clean_desc) > 16 else clean_desc
+                    active_badge = f" [{tid}:▶ {short_desc}]"
                     break
+                else:
+                    m2 = re.match(r"^\s*-\s*\[([ >])\]\s*(.*)", l)
+                    if m2:
+                        marker, desc = m2.groups()
+                        clean_desc = re.sub(r"[`*]", "", desc).strip()
+                        short_desc = (clean_desc[:14] + "..") if len(clean_desc) > 16 else clean_desc
+                        active_badge = f" [▶ {short_desc}]"
+                        break
                     
             if total > 0:
                 return f"📋 {done}/{total}{active_badge}"
