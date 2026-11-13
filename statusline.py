@@ -9,6 +9,7 @@ import sys
 import json
 import os
 import glob
+import re
 import subprocess
 from pathlib import Path
 
@@ -62,7 +63,7 @@ def get_git_info(cwd):
         return ""
 
 def get_task_ledger_info(cwd):
-    """Fast probe for active tasks in workspace (Harness² & Spec Kit DAG)"""
+    """Deep-dive probe for active tasks in workspace (Harness² & Spec Kit DAG)"""
     try:
         # Check .specify/memory/tasks_ledger.json first
         ledger_path = os.path.join(cwd, ".specify", "memory", "tasks_ledger.json")
@@ -71,15 +72,19 @@ def get_task_ledger_info(cwd):
                 data = json.load(f)
                 total = data.get("total_tasks", 0)
                 done = data.get("completed_tasks", 0)
-                active = None
+                active_task = None
                 for t in data.get("tasks", []):
                     if t.get("status") == "IN_PROGRESS":
-                        active = t.get("id")
+                        t_id = t.get("id", "TASK")
+                        t_title = t.get("title", "")[:18]
+                        active_task = f"[{t_id}:▶ {t_title}]"
                         break
-                    if not active and t.get("status") == "TODO":
-                        active = t.get("id")
+                    if not active_task and t.get("status") == "TODO":
+                        t_id = t.get("id", "TASK")
+                        t_title = t.get("title", "")[:18]
+                        active_task = f"[{t_id}:▶ {t_title}]"
                 if total > 0:
-                    badge = f" [{active}:▶]" if active else ""
+                    badge = f" {active_task}" if active_task else ""
                     return f"📋 {done}/{total}{badge}"
 
         # Fallback to inspecting specs/*/tasks.md
@@ -87,11 +92,26 @@ def get_task_ledger_info(cwd):
         if spec_tasks:
             latest = max(spec_tasks, key=os.path.getmtime)
             with open(latest, "r", encoding="utf-8", errors="ignore") as f:
-                content = f.read()
-                total = len(content.split("- [ ]")) + len(content.split("- [x]")) + len(content.split("- [>]")) - 3
-                done = len(content.split("- [x]")) - 1
-                if total > 0:
-                    return f"📋 {done}/{total}"
+                lines = f.readlines()
+            
+            total = sum(1 for l in lines if re.match(r"^\s*-\s*\[[ xX>!~]\]", l))
+            done = sum(1 for l in lines if re.match(r"^\s*-\s*\[[xX]\]", l))
+            
+            active_badge = ""
+            for l in lines:
+                m = re.match(r"^\s*-\s*\[([ >])\]\s*(\[?(T\d+)\]?:?)?\s*(.*)", l)
+                if m:
+                    marker, _, tid, desc = m.groups()
+                    tid_str = tid if tid else "TASK"
+                    clean_desc = desc.strip()
+                    if ":" in clean_desc and len(clean_desc.split(":", 1)[0]) < 20:
+                        clean_desc = clean_desc.split(":", 1)[1].strip()
+                    short_desc = (clean_desc[:16] + "..") if len(clean_desc) > 18 else clean_desc
+                    active_badge = f" [{tid_str}:▶ {short_desc}]"
+                    break
+                    
+            if total > 0:
+                return f"📋 {done}/{total}{active_badge}"
     except Exception:
         pass
     return None
@@ -154,7 +174,7 @@ def render_statusline():
     else:
         cost_str = f"{FG_GREEN}free{RESET}"
 
-    # 7. Tasks & Swarm
+    # 7. Tasks & Swarm Deep Dive
     task_ledger_str = get_task_ledger_info(current_dir)
     if task_ledger_str:
         task_str = f"{FG_YELLOW}{task_ledger_str}{RESET}"
