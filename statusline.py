@@ -2,11 +2,20 @@
 """
 Oh-My-Anti / OMP-Style Custom Statusline for Antigravity (agy).
 Receives real-time JSON via stdin every cycle and formats a rich, multi-segment visual status bar.
+Robust against Windows CP1252/Unicode terminal encoding limitations.
 """
 
 import sys
 import json
 import os
+
+# Ensure UTF-8 output encoding on Windows console
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stdin, "reconfigure"):
+    sys.stdin.reconfigure(encoding="utf-8", errors="replace")
 
 # ANSI color codes
 RESET = "\033[0m"
@@ -56,20 +65,19 @@ def render_statusline():
     # Build stylized segments
     # Segment 1: Mode pill
     mode_color = BG_MAGENTA if "PLAN" in mode else (BG_BLUE if "AUTO" in mode else BG_GREEN)
-    seg_mode = f"{mode_color}{FG_WHITE}{BOLD} ⚡ {mode} {RESET}"
+    seg_mode = f"{mode_color}{FG_WHITE}{BOLD} [MODE: {mode}] {RESET}"
 
     # Segment 2: Model pill
-    seg_model = f"{BG_DARK}{FG_CYAN} 🤖 {model} {RESET}"
+    seg_model = f"{BG_DARK}{FG_CYAN} [MODEL: {model}] {RESET}"
 
     # Segment 3: Workspace dir
-    seg_dir = f"{BG_DARK}{FG_WHITE} 📁 {dir_name} {RESET}"
+    seg_dir = f"{BG_DARK}{FG_WHITE} [{dir_name}] {RESET}"
 
     # Segment 4: Artifacts / Tasks
-    seg_artifacts = f"{BG_DARK}{FG_YELLOW} 📋 Tasks: {artifact_count} {RESET}"
+    seg_artifacts = f"{BG_DARK}{FG_YELLOW} [Tasks: {artifact_count}] {RESET}"
 
     # Segment 5: Active Subagents (EGM Swarm)
-    subagent_icon = "🐝" if subagent_count > 0 else "💤"
-    seg_swarm = f"{BG_DARK}{FG_GREEN} {subagent_icon} Swarm: {subagent_count} {RESET}"
+    seg_swarm = f"{BG_DARK}{FG_GREEN} [Swarm: {subagent_count}] {RESET}"
 
     # Segment 6: Token info
     if isinstance(tokens, (int, float)) and tokens > 0:
@@ -77,13 +85,20 @@ def render_statusline():
             token_str = f"{tokens/1000:.1f}k"
         else:
             token_str = str(tokens)
-        seg_tokens = f"{BG_DARK}{FG_GRAY} 🪙 {token_str} {RESET}"
+        seg_tokens = f"{BG_DARK}{FG_GRAY} [{token_str} tok] {RESET}"
     else:
         seg_tokens = ""
 
     # Assemble the final statusline
     line = f"{seg_mode}{seg_model}{seg_dir}{seg_artifacts}{seg_swarm}{seg_tokens}"
-    print(line)
+    try:
+        sys.stdout.write(line + "\n")
+        sys.stdout.flush()
+    except Exception:
+        # Fallback to pure ascii if anything fails
+        clean = line.encode("ascii", "replace").decode("ascii")
+        sys.stdout.write(clean + "\n")
+        sys.stdout.flush()
 
 if __name__ == "__main__":
     render_statusline()
