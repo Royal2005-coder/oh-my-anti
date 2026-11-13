@@ -2,13 +2,15 @@
 """
 Oh-My-Anti / OMP-Parity Custom Statusline for Antigravity (agy).
 Matches the exact visual elegance, git tracking, context window, model identification,
-and swarm/task monitoring of OMP (Oh My Pi).
+and swarm/task monitoring of OMP (Oh My Pi), augmented with Google Research Harness² Task Ledger.
 """
 
 import sys
 import json
 import os
+import glob
 import subprocess
+from pathlib import Path
 
 # Ensure UTF-8 output encoding on Windows console
 if hasattr(sys.stdout, "reconfigure"):
@@ -59,6 +61,41 @@ def get_git_info(cwd):
     except Exception:
         return ""
 
+def get_task_ledger_info(cwd):
+    """Fast probe for active tasks in workspace (Harness² & Spec Kit DAG)"""
+    try:
+        # Check .specify/memory/tasks_ledger.json first
+        ledger_path = os.path.join(cwd, ".specify", "memory", "tasks_ledger.json")
+        if os.path.exists(ledger_path):
+            with open(ledger_path, "r", encoding="utf-8", errors="ignore") as f:
+                data = json.load(f)
+                total = data.get("total_tasks", 0)
+                done = data.get("completed_tasks", 0)
+                active = None
+                for t in data.get("tasks", []):
+                    if t.get("status") == "IN_PROGRESS":
+                        active = t.get("id")
+                        break
+                    if not active and t.get("status") == "TODO":
+                        active = t.get("id")
+                if total > 0:
+                    badge = f" [{active}:▶]" if active else ""
+                    return f"📋 {done}/{total}{badge}"
+
+        # Fallback to inspecting specs/*/tasks.md
+        spec_tasks = glob.glob(os.path.join(cwd, "specs", "*", "tasks.md"))
+        if spec_tasks:
+            latest = max(spec_tasks, key=os.path.getmtime)
+            with open(latest, "r", encoding="utf-8", errors="ignore") as f:
+                content = f.read()
+                total = len(content.split("- [ ]")) + len(content.split("- [x]")) + len(content.split("- [>]")) - 3
+                done = len(content.split("- [x]")) - 1
+                if total > 0:
+                    return f"📋 {done}/{total}"
+    except Exception:
+        pass
+    return None
+
 def render_statusline():
     try:
         raw_input = sys.stdin.read()
@@ -68,6 +105,8 @@ def render_statusline():
             data = json.loads(raw_input)
     except Exception:
         data = {}
+
+    current_dir = data.get("current_dir", os.getcwd())
 
     # 1. Mode Pill
     mode = str(data.get("agentMode", data.get("currentModeId", data.get("mode", "auto")))).upper()
@@ -93,7 +132,6 @@ def render_statusline():
     model_str = f"{FG_CYAN}◒ {model_name}{RESET}"
 
     # 3. Directory
-    current_dir = data.get("current_dir", os.getcwd())
     dir_name = os.path.basename(current_dir.rstrip("\\/")) or "workspace"
     dir_str = f"{FG_WHITE}📁 …/{dir_name}{RESET}"
 
@@ -117,11 +155,16 @@ def render_statusline():
         cost_str = f"{FG_GREEN}free{RESET}"
 
     # 7. Tasks & Swarm
-    artifact_count = data.get("artifact_count", 0) or 0
+    task_ledger_str = get_task_ledger_info(current_dir)
+    if task_ledger_str:
+        task_str = f"{FG_YELLOW}{task_ledger_str}{RESET}"
+    else:
+        artifact_count = data.get("artifact_count", 0) or 0
+        task_str = f"{FG_YELLOW}📋 {artifact_count}{RESET}"
+
     subagents = data.get("Subagents", data.get("active_subagents", []))
     subagent_count = len(subagents) if isinstance(subagents, list) else 0
 
-    task_str = f"{FG_YELLOW}📋 {artifact_count}{RESET}"
     swarm_icon = "🐝" if subagent_count > 0 else "💤"
     swarm_str = f"{FG_CYAN}{swarm_icon} {subagent_count}{RESET}"
 

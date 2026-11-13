@@ -1,8 +1,8 @@
 {
   "name": "oh-my-anti",
-  "displayName": "Oh My Anti (Unified SDD & Adversarial Review Suite)",
-  "version": "1.0.0",
-  "description": "End-to-end spec engineering toolkit for Antigravity combining GitHub Spec Kit (Spec-Driven Development) and Google Elephant-Goldfish Model (EGM Swarm Review) with autonomous orchestration.",
+  "displayName": "Oh My Anti (Unified Harness², Spec Kit & EGM Swarm Suite)",
+  "version": "2.0.0",
+  "description": "Enterprise autonomous engineering framework for Antigravity combining Google Research Harness² (Recursive Agent Harnessing), GitHub Spec Kit (SDD), and Google Elephant-Goldfish Model (EGM Swarm Review) with OMP-parity Task Ledger.",
   "author": {
     "name": "Royal2005-coder",
     "url": "https://github.com/Royal2005-coder"
@@ -12,6 +12,9 @@
   "license": "MIT",
   "keywords": [
     "antigravity",
+    "harness2",
+    "google-research",
+    "recursive-agent",
     "spec-kit",
     "sdd",
     "egm",
@@ -19,6 +22,8 @@
     "adversarial-review",
     "subagents",
     "code-generation",
-    "orchestrator"
+    "orchestrator",
+    "task-ledger",
+    "omp"
   ]
 }

@@ -1,84 +1,59 @@
-# Oh My Anti (OMA) 🚀
+# Oh My Anti (oh-my-anti) ⚡
 
-> Unified Spec-Driven Development (Spec Kit) & Adversarial Multi-Agent Review (EGM) Pipeline for Antigravity.
+> **Enterprise Autonomous Engineering Harness for Google Antigravity (`agy`)**  
+> Uniting **Google Research Harness²** (Recursive Agent Harnessing), **GitHub Spec Kit** (Spec-Driven Development), **Google Elephant-Goldfish Model** (Adversarial Multi-Agent Review), and **Oh-My-Pi (OMP)** Task Ledger parity.
 
-Oh My Anti is an end-to-end engineering suite designed for Google Antigravity and AI coding agents. It orchestrates the full lifecycle of feature development: from natural language requirements, through formal specification, adversarial multi-agent review, technical planning, and task breakdown, to final implementation and verification.
-
----
-
-## ⚡ Architecture & Pipeline
-
-```mermaid
-flowchart TD
-    subgraph S1["Stage 1: Specification (Spec Kit)"]
-        A1["Project Constitution & Baseline"] --> A2["/speckit-specify<br/>(Generate spec.md)"]
-        A2 --> A3["/speckit-clarify<br/>(De-risk assumptions)"]
-    end
-
-    subgraph S2["Stage 2: Adversarial Audit (EGM Swarm)"]
-        B1["Dispatch Reviewers via invoke_subagent"]
-        B1 --> B2["egm-design (Architecture & Failure Modes)"]
-        B1 --> B3["egm-zoom-out (Minimalism & Codebase Reuse)"]
-        B1 --> B4["egm-codebase-details (Grounding to Live Code)"]
-        B2 & B3 & B4 --> B5["egm-synthesizer (Actionable Review Matrix)"]
-    end
-
-    subgraph S3["Stage 3: Technical Planning & Tasks"]
-        C1["/speckit-plan (Technical Architecture)"]
-        C1 --> C2["egm-implementation-readiness (Audit Plan)"]
-        C2 --> C3["/speckit-tasks (Atomic Tasks Checklist)"]
-        C3 --> C4["/speckit-analyze & /speckit-checklist"]
-    end
-
-    subgraph S4["Stage 4: Implementation & Convergence"]
-        D1["/speckit-implement (TDD Execution)"]
-        D1 --> D2["Test & Lint Verification"]
-        D2 --> D3["/speckit-converge (Reconcile Code vs Spec)"]
-    end
-
-    S1 --> S2 --> S3 --> S4
-```
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Harness²](https://img.shields.io/badge/Google%20Research-Harness%C2%B2-EA4335)](https://arxiv.org/abs/2610.14224)
+[![GitHub Spec Kit](https://img.shields.io/badge/GitHub-Spec%20Kit-24292e)](https://github.com/github/spec-kit)
+[![EGM](https://img.shields.io/badge/Google-EGM%20Swarm-4285F4)](https://github.com/google/elephant-goldfish-model)
 
 ---
 
-## 📦 What's Included
+## 🌟 Core Pillars
 
-1. **End-to-End Orchestrator**:
-   * `/speckit-egm`: Single autonomous command running the entire 4-stage pipeline from prompt to verified code.
-2. **Spec Kit (SDD)**:
-   * `/speckit-constitution`: Non-negotiable project architecture principles.
-   * `/speckit-specify`: Structured feature specifications.
-   * `/speckit-clarify`: Interactive clarification of ambiguous points.
-   * `/speckit-plan`: Technical design and API contracts.
-   * `/speckit-tasks`: Granular, dependency-ordered tasks.
-   * `/speckit-implement`: Phased TDD task implementation.
-   * `/speckit-converge`: Verification and codebase reconciliation.
-3. **EGM Review Personas**:
-   * 10 fresh-context subagent reviewer prompts (`zoom_out`, `design_critic`, `codebase_details`, `synthesizer`, etc.).
-   * Document standards for Heilmeier criteria and implementation readiness.
-4. **Natural Language Intent Classifier**:
-   * Pre-configured `AGENTS.md` rules with bilingual (Vietnamese/English) automatic intent detection.
+1. **Google Research Harness² (Dual Recursion & 8 Components)**:
+   - **Task-Level Recursion**: Systematic **Propose – Probe – Compose** loop for each task in the DAG without ground-truth feedback.
+   - **Harnessing-Level Recursion**: Persistent experience reflection in `.specify/memory/lessons.md`.
+   - **8 Harness Components**: System Prompt (C1), Guardrails (C2), Memory (C3), Tools (C4), Subagents (C5), Skills (C6), Scripts (C7), Plugins (C8).
+2. **GitHub Spec Kit (SDD)**:
+   - Specification (`spec.md`), Edge-Case Clarification (`speckit-clarify`), Architecture Planning (`plan.md`), and Verifiable Convergence (`speckit-converge`).
+3. **Google Elephant-Goldfish Model (EGM)**:
+   - Deep repository memory (Elephant) paired with unbiased adversarial audits by fresh-context isolated subagents (Goldfish personas).
+4. **OMP-Parity Task Ledger DAG**:
+   - Atomic task checklist with phase grouping, dependency DAG, role assignment, verification gates, and live statusline tracking (`📋 [3/10] T04:▶`).
 
 ---
 
-## 🛠️ Quick Installation
+## 🚀 Fast Installation
 
-### Windows (PowerShell)
+### PowerShell (Windows)
 ```powershell
-git clone https://github.com/Royal2005-coder/oh-my-anti.git
-cd oh-my-anti
-.\install.ps1
+irm https://raw.githubusercontent.com/Royal2005-coder/oh-my-anti/main/install.ps1 | iex
 ```
 
-### macOS / Linux
+### Bash (macOS / Linux)
 ```bash
-git clone https://github.com/Royal2005-coder/oh-my-anti.git
-cd oh-my-anti
-chmod +x install.sh
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/Royal2005-coder/oh-my-anti/main/install.sh | bash
 ```
 
 ---
 
-## 📄 License
-MIT License. Open-source and free for community use.
+## 🎮 Slash Commands & Workflows
+
+| Command | Action |
+|---|---|
+| **`/egm <task>`** | **Master Autonomous Orchestrator**: Triggers complete 5-phase Harness²-EGM-SpecKit autonomous engineering pipeline. |
+| **`/egm review [file/spec]`** | Dispatches parallel isolated Goldfish personas (`invoke_subagent`) to audit the target without bias. |
+| **`/egm brainstorm [topic]`** | Performs deep contextual exploration across the codebase (Elephant Memory) to analyze tradeoffs. |
+| **`/harness2 preflight`** | Audits the workspace across all 8 harness components C1-C8. |
+| **`/task-ledger`** | Renders the interactive OMP-style Task Orchestration DAG table. |
+
+---
+
+## 📊 Live Statusline
+
+Equipped with real-time statusline script rendering context, git delta, quota, active subagents, and live task progress:
+```text
+π · ⚡ AUTO · ◒ Gemini 3.8 Flash · 📁 …/velura-angular · ⑂ develop *2 ?1 · ◫ 2.4%/1M ⟲ · free · 📋 3/10 [T04:▶] · 🐝 4
+```
