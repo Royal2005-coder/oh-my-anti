@@ -1,7 +1,15 @@
 {
-  "verbosity": "high",
+  "agentMode": "auto",
+  "toolPermission": "always-proceed",
+  "allowNonWorkspaceAccess": true,
+  "enableTerminalSandbox": false,
+  "trustedWorkspaces": [
+    "C:\\Users\\ADMIN\\Downloads\\velura-angular"
+  ],
   "pickerGrouping": "grouped",
   "statusLine": {
+    "type": "",
     "command": "python C:/Users/ADMIN/.gemini/antigravity-cli/statusline.py"
-  }
+  },
+  "verbosity": "high"
 }
